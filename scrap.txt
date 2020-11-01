@@ -1,0 +1,216 @@
+Held on Saturday and Sunday night at 6-8 PM. There are junior and senior brackets. 
+              Record and view your results here.
+                    <div class="post-preview">
+        <a href="post.html">
+          <h2 class="post-title">
+            Title
+          </h2>
+          <p class="post-meta">
+            Dream Bean Club<br>
+            800 P St<br>
+            Lincoln, Nebraska 68508
+          </p>
+        </a>
+      </div>
+      <hr>
+
+          case 'uploadImage':
+        $user_display = $_SESSION["user_name"];
+        $error;
+        $pass_message = '';
+        $email_message = '';
+        $uploads_dir = '../images/uploads/';
+        $isValid = true;
+        if (isset($_FILES['image'])) {
+            $file_name = $_FILES['image']['name'];
+            $file_size = $_FILES['image']['size'];
+            $file_tmp = $_FILES['image']['tmp_name'];
+            $file_type = $_FILES['image']['type'];
+            $temp = $_FILES['image']['name'];
+            $temp = explode('.', $temp);
+            $temp = end($temp);
+            $file_ext = strtolower($temp);
+
+            // var_dump($_FILES);
+
+            $extensions = array("jpeg", "jpg", "png", "gif");
+            // Check if it's a proper file extension
+            if (in_array($file_ext, $extensions) === false) {
+                $error = "file extension not in whitelist: " . join(',', $extensions);
+                $isValid = false;
+            }
+            // Check file size             
+            if ($_FILES['image']['size'] > 1000000) {
+                $error = "File upload is too large.";
+                $isValid = false;
+            }
+
+            if ($isValid == true) {
+                $file_name = $user_display . $file_name;
+                $upload_name = $uploads_dir . $file_name;
+                move_uploaded_file($file_tmp, "$uploads_dir/$file_name");
+                // $userID = UserDB::fetchUserID($user_display);
+                UserDB::uploadImage($user_display, $upload_name);
+                $user_image = UserDB::fetchImage($user_display);
+                $user_message = "Success!";
+                include('userprofile.php');
+            } else {
+                include('../errors/error.php');
+            }
+        }
+        break;
+
+          /*
+    case 'list_users':
+        $a = '<p class="alert alert-success" role="alert" type="hidden" >';
+        $b = '<p class="alert alert-danger" role="alert" type="hidden" >';
+        $c = ' </p>';
+        $errMessage = filter_input(INPUT_GET, "errMessage");
+        $sucMessage = filter_input(INPUT_GET, "sucMessage");
+        if (isset($view_user)) :
+            $view_user = $_SESSION["view_user"];
+        else :
+            $view_user = '';
+        endif;
+        if (isset($_SESSION["view_user"])) :
+            $view_user = $_SESSION["view_user"];
+            $profile = $view_user;
+        endif;
+        if (isset(($_SESSION["user_name"]))) :
+            $commenterProfile = $_SESSION["user_name"];
+            $_SESSION["thier_username"] = $_SESSION["user_name"];
+        else :
+            $view_user = '';
+        endif;
+        $users = UserDB::getUsers();
+        include('users_directory.php');
+        break;
+    case 'view_profile':
+        $_SESSION["view_user"] = filter_input(INPUT_POST, "profile");
+
+        if (isset($_SESSION["view_user"])) :
+            $view_user = $_SESSION["view_user"];
+            $profile = $view_user;
+        endif;
+        if (isset(($_SESSION["user_name"]))) :
+            $commenterProfile = $_SESSION["user_name"];
+            $entry = $commenterProfile;
+            $_SESSION["thier_username"] = $_SESSION["user_name"];
+        else :
+            $view_user = '';
+        endif;
+        $view_user = $_SESSION["view_user"];
+        //$commenterProfile = $_SESSION["user_name"];
+        $error_message = '';
+
+        include('public_profile.php');
+        break;
+
+        
+    case 'post_comment':
+        if (isset($user_name) === false) :
+            $user_name = '';
+        endif;
+        $view_user = $_SESSION["view_user"];
+
+        $aerror = "Something went wrong adding the comment to the database...";
+        $success = "Success comment added to " . $view_user . "'s profile.";
+
+        $commentToAdd = filter_input(INPUT_POST, "commentToAdd", FILTER_VALIDATE_INT);
+        $commentid = null;
+        $profile = $view_user;
+        if (isset($_SESSION["user_name"])) :
+            $commenterProfile = $_SESSION["user_name"];
+        endif;
+        if (isset($commenterProfile) === false) :
+            $commenterProfile = null;
+        endif;
+        $acomment = filter_input(INPUT_POST, 'acomment');
+
+        $atimestamp = null;
+        // Create the comment object
+        $commentToAdd = new Comment($commentid, $profile, $commenterProfile, $acomment, $atimestamp);
+        // Add the comment to the database
+        if ($commentToAdd === false || $commentToAdd === null) {
+            $error_message = "Something went wrong adding the comment to the database... <br> comment cannot be null";
+            include('public_profile.php');
+        } elseif ($profile === false || $profile === null || $profile === '' || $view_user === false || $view_user === null || $view_user === '' || $user_name === null || $user_name === false || $commenterProfile === null) {
+            $error_message = "You need to login to preform this action...";
+            include('public_profile.php');
+        } elseif ($acomment === '') {
+            $error_message = "You cannot leave a comment with nothing as a message...";
+            include('public_profile.php');
+        } elseif (strlen($acomment) > 2500) {
+            $error_message = "Your comment is greater than 2,500 characters.";
+            $acomment = filter_input(INPUT_POST, 'acomment');
+            include('public_profile.php');
+        } elseif ($profile === $commenterProfile) {
+            $error_message = "You cannot leave a comment on your own profile...";
+            include('public_profile.php');
+        } else {
+            // Add the comment to the database
+            CommentDB::addComment($commentToAdd);
+            $success = "Success comment added to " . $view_user . "'s profile.";
+            header("Location: index.php?action=list_users&sucMessage");
+            die();
+            break;
+        }
+        break;
+
+case "viewdelete":
+    $profile = $_SESSION["user_name"];
+
+    $a = '<p class="alert alert-success" role="alert" type="hidden" >';
+    $b = '<p class="alert alert-danger" role="alert" type="hidden" >';
+    $c = ' </p>';
+    $errMessage = filter_input(INPUT_GET, "errMessage");
+    $sucMessage = filter_input(INPUT_GET, "sucMessage");
+    $aerror = "Bad ID, cannot be deleted";
+    $success = "Success comment deleted";
+    $comments = CommentDB::getbyprofile($profile);
+    include('viewdelete.php');
+    die();
+    break;
+
+    case "delete":
+        $idToDelete = filter_input(INPUT_POST, "idToDelete", FILTER_VALIDATE_INT);
+
+        if ($idToDelete === false || $idToDelete === null) {
+            header("Location: index.php?action=viewdelete&errMessage");
+            die();
+        }
+        Commentdb::deleteComment($idToDelete);
+        header("Location: index.php?action=viewdelete&sucMessage");
+        die();
+        break;
+
+
+        case "viewupdatecomment":
+            $profile = $_SESSION["user_name"];
+        
+            $a = '<p class="alert alert-success" role="alert" type="hidden" >';
+            $b = '<p class="alert alert-danger" role="alert" type="hidden" >';
+            $c = ' </p>';
+            $errMessage = filter_input(INPUT_GET, "errMessage");
+            $sucMessage = filter_input(INPUT_GET, "sucMessage");
+            $aerror = "Something went wrong, id could not be updated";
+            $success = "Success comment updated";
+            $comments = CommentDB::getbyprofile($profile);
+            include('updateComment.php');
+            die();
+            break;
+
+        case 'updateComment' :
+            $idToUpdate = filter_input(INPUT_POST, "idToUpdate", FILTER_VALIDATE_INT);
+            $newComment = filter_input(INPUT_POST, "acomment", FILTER_VALIDATE_INT);
+            if ($idToUpdate === false || $idToUpdate === null || $idToUpdate === '' || $newComment === '' || $newComment === null || $newComment === false) {
+                header("Location: index.php?action=viewupdatecomment&errMessage");
+                die();
+            }
+            CommentDB::updateComment($idToUpdate, $newComment);
+            header("Location: index.php?action=viewupdatecomment&sucMessage");
+            die();
+        break;
+
+$the_title = "SC | Login";
+$pathcor = "../";
