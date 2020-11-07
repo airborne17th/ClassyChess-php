@@ -514,3 +514,11 @@ nav {
 .box input[type=submit]:hover {
   background: #78a1bb;
 }
+
+.confirmation{
+  justify-content: center;
+}
+
+table{
+  text-align: center;
+}

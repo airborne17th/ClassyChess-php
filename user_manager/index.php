@@ -244,7 +244,7 @@ switch ($action) {
         } 
         $user_message = '';
         $email_message = '';
-        $player_display = $_SESSION["user_id"];
+        $user_display = $_SESSION["user_id"];
         include('user_profile.php');
         break;
     case 'changeEmail' :
@@ -261,22 +261,56 @@ switch ($action) {
             }
             $pass_message = '';
             $user_message = '';
-            $user = $_SESSION["user_id"];
+            $email_message = '';
+            $user_display = $_SESSION["user_id"];
             include('user_profile.php');
         break;        
     case 'admin' :
+        $type_message = '';
         $user = $_SESSION["user_id"];
         $userTest = UserDB::authenticationUserType($user);
         $user_display = $_SESSION["user_id"];
         if($userTest[0] === '3'){
+            $users = UserDB::getUsers();
             include('admin.php');
         } else{
             $pass_message = '';
-            // $user_message = 'Sorry, admins only.';
-            $user_message = $userTest[0];
+            $user_message = 'Sorry, admins only.';
+            // $user_message = $userTest[0];
             $email_message = '';
             include('user_profile.php');
         }
     break;
+    case 'changeUserType':
+        $userID = filter_input(INPUT_POST, "user");
+        $usertype = filter_input(INPUT_POST, "newtype");
+        $user = $_SESSION["user_id"];
+        $users = UserDB::getUsers();
+        if($user === $userID){
+            $type_message = 'You cannot change your user type!';
+        } else{
+            UserDB::changeUserType($usertype, $userID);
+            $type_message = 'User changed successfully.';
+        }
+        include('admin.php');
+    break;
+    case 'news_sub' :
+        $newsletter = 1;
+        $user_display = $_SESSION["user_id"];
+        UserDB::changeNewletter($newsletter, $user_display);
+        $email_message = '';
+        $pass_message = '';
+        $user_message = 'Congratuations, you are subscribed!';
+        include('user_profile.php');
+    break;        
+    case 'news_unsub' :
+        $newsletter = 0;
+        $user_display = $_SESSION["user_id"];
+        UserDB::changeNewletter($newsletter, $user_display);
+        $email_message = '';
+        $pass_message = '';
+        $user_message = 'Sorry, to see you go. You are unsubbed.';
+        include('user_profile.php');
+    break;        
 }
 ?>

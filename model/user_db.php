@@ -63,26 +63,26 @@ class UserDB {
         return $hashed_password;
     }
     
-    public static function changeNewletter($newEntry, $oldEntry) {
+    public static function changeNewletter($newEntry, $user) {
         $db = Database::getDB();
         $query = 'UPDATE users
                     SET newsletter = :newEntry
-                  WHERE newsletter = :oldEntry'; 
+                    WHERE user_id = :user'; 
         $statement = $db->prepare($query);
         $statement->bindValue(':newEntry', $newEntry);
-        $statement->bindValue(':oldEntry', $oldEntry);
+        $statement->bindValue(':user', $user);
         $statement->execute();
         $statement->closeCursor();
     }
 
-    public static function changeUserType($newEntry, $oldEntry) {
+    public static function changeUserType($newEntry, $user) {
         $db = Database::getDB();
         $query = 'UPDATE users
-                    SET usertype = :newEntry
-                  WHERE usertype = :oldEntry'; 
+                    SET usertype = :usertype
+                    WHERE user_id = :user'; 
         $statement = $db->prepare($query);
-        $statement->bindValue(':newEntry', $newEntry);
-        $statement->bindValue(':oldEntry', $oldEntry);
+        $statement->bindValue(':usertype', $newEntry);
+        $statement->bindValue(':user', $user);
         $statement->execute();
         $statement->closeCursor();
     }

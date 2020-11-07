@@ -19,6 +19,7 @@ require_once '../view/header.php';
 
     <body>
         <main>
+        <div class="container">
             <h1>Thanks for Signing Up!</h1>
             <p>Here is the information we have registered.</p>
             <p>First Name: <?php echo $first_name; ?></p>
@@ -26,7 +27,14 @@ require_once '../view/header.php';
             <p>Email: <?php echo $email; ?></p>
             <p>UserID: <?php echo $userID; ?></p>
             <p>Password: <?php echo $passTest; ?></p>
+      <p>Do you want to subscribe to our newsletter?</p>
+      <form action="index.php" method="POST">
+      <input type="submit" value="Subscribe!" />
+      <input type="hidden" name="action" value="news_sub"/>
+      </form>
+      </div>
      </main>
+     
     </body>
 <?php require_once '../view/footer.php'; ?> 
 
