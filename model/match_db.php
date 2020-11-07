@@ -14,9 +14,9 @@ class MatchDB {
         $matches = array();
         foreach($rows as $row) {
             $i = new Match(
-                    $row['player1_name'], $row['player1_ID'], $row['char1_name'],
-                    $row['player2_name'], $row['player2_ID'], $row['char2_name'],
-                    $row['winner_ID'], $row['loss_ID'], $row['recorderID']
+                    $row['player1_name'], $row['player1_ID'], $row['player1_opening'],
+                    $row['player2_name'], $row['player2_ID'], $row['player2_opening'],
+                    $row['winner_ID'], $row['recorderID']
                 );
             $i->setMatchID($row['matchID']);
             $matches[] = $i;
@@ -26,61 +26,37 @@ class MatchDB {
 
     public static function getPlayers() {
         $db = Database::getDB();
-
-        $query = 'SELECT playerID, playerName FROM players
-                  ORDER BY playerID';
+        $query = 'SELECT user_id, lastName FROM users
+                  ORDER BY user_id';
         $statement = $db->prepare($query);
         $statement->execute();
         $rows = $statement->fetchAll();
         $statement->closeCursor();
-        
         $players = array();
         foreach($rows as $row) {
             $i = new MatchPlayer(
-              $row['playerName']);
-            $i->setID($row['playerID']);
-            $matchplayers[] = $i;
+              $row['lastName']);
+            $i->setID($row['user_id']);
+            $players[] = $i;
         }
-        return $matchplayers;
-    }
-
-
-    public static function getChars() {
-        $db = Database::getDB();
-
-        $query = 'SELECT charID, charName FROM characters
-                  ORDER BY charID';
-        $statement = $db->prepare($query);
-        $statement->execute();
-        $rows = $statement->fetchAll();
-        $statement->closeCursor();
-        
-        $chars = array();
-        foreach($rows as $row) {
-            $i = new MatchChar(
-                    $row['charName']);
-            $i->setID($row['charID']);
-            $matchchars[] = $i;
-        }
-        return $matchchars;
+        return $players;
     }
     
     public static function addMatch($i) {
       $db = Database::getDB();
       
       $query = 'INSERT INTO matches
-                   (player1_name, player1_ID, char1_name, player2_name, player2_ID, char2_name, winner_ID, loss_ID, recorderID)
+                   (player1_name, player1_ID, player1_opening, player2_name, player2_ID, player2_opening, winner_ID, recorderID)
                 VALUES
-                   (:player1_name, :player1_ID, :char1_name, :player2_name, :player2_ID, :char2_name, :winner_ID, :loss_ID, :recorderID)';
+                   (:player1_name, :player1_ID, :player1_opening, :player2_name, :player2_ID, :player2_opening, :winner_ID, :recorderID)';
       $statement = $db->prepare($query);
       $statement->bindValue(':player1_name', $i->getPlayer1_Name());
       $statement->bindValue(':player1_ID', $i->getPlayer1_ID());
-      $statement->bindValue(':char1_name', $i->getChar1_Name());
+      $statement->bindValue(':player1_opening', $i->getPlayer1_Opening());
       $statement->bindValue(':player2_name', $i->getPlayer2_Name());
       $statement->bindValue(':player2_ID', $i->getPlayer2_ID());
-      $statement->bindValue(':char2_name', $i->getChar2_Name());
+      $statement->bindValue(':player2_opening', $i->getPlayer2_Opening());
       $statement->bindValue(':winner_ID', $i->getWinner_ID());
-      $statement->bindValue(':loss_ID', $i->getLoss_ID());
       $statement->bindValue(':recorderID', $i->getRecorderID());
       $statement->execute();
       $statement->closeCursor();
@@ -88,68 +64,33 @@ class MatchDB {
 
     public static function set_PlayerWin($entry) {
         $db = Database::getDB();
-        $query = 'UPDATE players
+        $query = 'UPDATE users
                     SET win = win + 1,
                         total = total + 1
-                  WHERE playerID = :entry'; 
+                  WHERE user_id = :entry'; 
         $statement = $db->prepare($query);
         $statement->bindValue(':entry', $entry);
         $statement->execute();
         $statement->closeCursor();
     }
 
-    public static function set_PlayerLoss($entry) {
+    public static function set_PlayerGame($entry) {
         $db = Database::getDB();
-        $query = 'UPDATE players
-                    SET loss = loss + 1,
-                        total = total + 1
-                  WHERE playerID = :entry'; 
+        $query = 'UPDATE users
+                    SET total = total + 1
+                  WHERE user_id = :entry'; 
         $statement = $db->prepare($query);
         $statement->bindValue(':entry', $entry);
         $statement->execute();
         $statement->closeCursor();
     }
 
-    public static function set_CharWin($entry) {
+
+    public static function authenticationPlayer($entry) {
         $db = Database::getDB();
-        $query = 'UPDATE characters
-                    SET win = win + 1,
-                        total = total + 1
-                  WHERE charID = :entry'; 
+        $query = 'SELECT user_id FROM users WHERE user_id = :entry';
         $statement = $db->prepare($query);
         $statement->bindValue(':entry', $entry);
-        $statement->execute();
-        $statement->closeCursor();
-    }
-
-    public static function set_CharLoss($entry) {
-        $db = Database::getDB();
-        $query = 'UPDATE characters
-                    SET loss = loss + 1,
-                        total = total + 1
-                  WHERE charID = :entry'; 
-        $statement = $db->prepare($query);
-        $statement->bindValue(':entry', $entry);
-        $statement->execute();
-        $statement->closeCursor();
-    }
-
-    public static function authenticationChar($charEntry) {
-        $db = Database::getDB();
-        $query = 'SELECT charID FROM characters WHERE charID = :entry';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':entry', $charEntry);
-        $statement->execute();
-        $valid_char = $statement->fetch();
-        $statement->closeCursor();
-        return $valid_char;
-    }
-
-    public static function authenticationPlayer($playerEntry) {
-        $db = Database::getDB();
-        $query = 'SELECT playerID FROM players WHERE playerID = :entry';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':entry', $playerEntry);
         $statement->execute();
         $valid_player = $statement->fetch();
         $statement->closeCursor();
@@ -158,7 +99,7 @@ class MatchDB {
 
     public static function getRecorderID($entry) {
         $db = Database::getDB();
-        $query = 'SELECT playerID FROM players WHERE playerName = :entry';
+        $query = 'SELECT user_id FROM users WHERE user_id = :entry';
         $statement = $db->prepare($query);
         $statement->bindValue(':entry', $entry);
         $statement->execute();
@@ -169,7 +110,7 @@ class MatchDB {
 
     public static function getPlayerName($entry) {
         $db = Database::getDB();
-        $query = 'SELECT playerName FROM players WHERE playerID = :entry';
+        $query = 'SELECT lastName FROM users WHERE user_id = :entry';
         $statement = $db->prepare($query);
         $statement->bindValue(':entry', $entry);
         $statement->execute();
@@ -178,81 +119,15 @@ class MatchDB {
         return $player_name;
     }
 
-    public static function getCharName($entry) {
-        $db = Database::getDB();
-        $query = 'SELECT charName FROM characters WHERE charID = :entry';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':entry', $entry);
-        $statement->execute();
-        $char_name = $statement->fetch();
-        $statement->closeCursor();
-        return $char_name;
-    }
-
     public static function getPlayerID($entry) {
         $db = Database::getDB();
-        $query = 'SELECT playerID FROM players WHERE playerName = :entry';
+        $query = 'SELECT user_id FROM users WHERE email = :entry';
         $statement = $db->prepare($query);
         $statement->bindValue(':entry', $entry);
         $statement->execute();
         $player_ID = $statement->fetch();
         $statement->closeCursor();
         return $player_ID;
-    }
-
-    public static function getCharID($entry) {
-        $db = Database::getDB();
-        $query = 'SELECT charID FROM characters WHERE charName = :entry';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':entry', $entry);
-        $statement->execute();
-        $char_ID = $statement->fetch();
-        $statement->closeCursor();
-        return $char_ID;
-    }
-
-    public static function find_char1_from_match($entry) {
-        $db = Database::getDB();
-        $query = 'SELECT char1_name FROM matches WHERE matchID = :entry';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':entry', $entry);
-        $statement->execute();
-        $char = $statement->fetch();
-        $statement->closeCursor();
-        return $char;
-    }
-
-    public static function find_player1_from_match($entry) {
-        $db = Database::getDB();
-        $query = 'SELECT player1_ID FROM matches WHERE matchID = :entry';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':entry', $entry);
-        $statement->execute();
-        $player = $statement->fetch();
-        $statement->closeCursor();
-        return $player;
-    }
-
-    public static function find_char2_from_match($entry) {
-        $db = Database::getDB();
-        $query = 'SELECT char2_name FROM matches WHERE matchID = :entry';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':entry', $entry);
-        $statement->execute();
-        $char = $statement->fetch();
-        $statement->closeCursor();
-        return $char;
-    }
-
-    public static function find_player2_from_match($entry) {
-        $db = Database::getDB();
-        $query = 'SELECT player2_ID FROM matches WHERE matchID = :entry';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':entry', $entry);
-        $statement->execute();
-        $player = $statement->fetch();
-        $statement->closeCursor();
-        return $player;
     }
 
     public static function find_winner_from_match($entry) {
@@ -264,17 +139,6 @@ class MatchDB {
         $winner = $statement->fetch();
         $statement->closeCursor();
         return $winner;
-    }
-
-    public static function find_loss_from_match($entry) {
-        $db = Database::getDB();
-        $query = 'SELECT loss_ID FROM matches WHERE matchID = :entry';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':entry', $entry);
-        $statement->execute();
-        $loss = $statement->fetch();
-        $statement->closeCursor();
-        return $loss;
     }
 
     public static function find_recorder_from_match($entry) {
@@ -301,7 +165,7 @@ class MatchDB {
 
     public static function reset_PlayerWin($entry) {
         $db = Database::getDB();
-        $query = 'UPDATE players
+        $query = 'UPDATE users
                     SET win = win - 1,
                         total = total - 1
                   WHERE playerID = :entry'; 
@@ -311,11 +175,10 @@ class MatchDB {
         $statement->closeCursor();
     }
 
-    public static function reset_PlayerLoss($entry) {
+    public static function reset_PlayerGame($entry) {
         $db = Database::getDB();
         $query = 'UPDATE players
-                    SET loss = loss - 1,
-                        total = total - 1
+                    SET total = total - 1
                   WHERE playerID = :entry'; 
         $statement = $db->prepare($query);
         $statement->bindValue(':entry', $entry);
@@ -323,28 +186,5 @@ class MatchDB {
         $statement->closeCursor();
     }
 
-    public static function reset_CharWin($entry) {
-        $db = Database::getDB();
-        $query = 'UPDATE characters
-                    SET win = win - 1,
-                        total = total - 1
-                  WHERE charID = :entry'; 
-        $statement = $db->prepare($query);
-        $statement->bindValue(':entry', $entry);
-        $statement->execute();
-        $statement->closeCursor();
-    }
-
-    public static function reset_CharLoss($entry) {
-        $db = Database::getDB();
-        $query = 'UPDATE characters
-                    SET loss = loss - 1,
-                        total = total - 1
-                  WHERE charID = :entry'; 
-        $statement = $db->prepare($query);
-        $statement->bindValue(':entry', $entry);
-        $statement->execute();
-        $statement->closeCursor();
-    }
 }
 ?>

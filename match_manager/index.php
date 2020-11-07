@@ -1,13 +1,10 @@
 <?php
 require('../model/database.php');
-require('../model/player.php');
-require('../model/player_db.php');
+require('../model/user.php');
+require('../model/user_db.php');
 require('../model/match.php');
-require('../model/match_char.php');
 require('../model/match_player.php');
 require('../model/match_db.php');
-require('../model/char.php');
-require('../model/char_db.php');
 session_start();
 $action = filter_input(INPUT_POST, 'action');
 if ($action === NULL) {
@@ -23,55 +20,46 @@ switch ($action) {
         break;
     case 'record_match':
         $error_message = '';
-        if(isset($_SESSION["player_name"])){
+        if(isset($_SESSION["user_id"])){
 
         } else {
             // This can never be set by a player naturally with the regex.
-            $_SESSION["player_name"] = "!";
+            $_SESSION["user_id"] = "!";
         }
 
-        $player = $_SESSION["player_name"];
+        $player = $_SESSION["user_id"];
 
-        if (is_null($player)){
-            $error_message = "Sorry, only members can record matches!";;
-            include('registration.php');
-        } 
-
-        if ($player === "!")
+        if ($player === "!" || is_null($player)) 
         {
             $error_message = "Sorry, only members can record matches!";
-            include('../player_manager/registration.php');
+            include('../user_manager/registration.php');
         } else {
-            $player_display = $_SESSION["player_name"];
+            $player_display = $_SESSION["user_id"];
             $matchplayers = MatchDB::getPlayers();
-            $matchchars = MatchDB::getChars();
             include('record.php');
         }
         break;
     
     case 'add_match':
-        $player_display = $_SESSION["player_name"];
+        $player_display = $_SESSION["user_id"];
         $matchplayers = MatchDB::getPlayers();
-        $matchchars = MatchDB::getChars();
 
         // Fetch the data from the match
         $player1_ID = filter_input(INPUT_POST, 'player1_ID');
-        $char1_ID = filter_input(INPUT_POST, 'char1_ID');
+        $player1_opening = filter_input(INPUT_POST, 'player1_opening');
         $player2_ID = filter_input(INPUT_POST, 'player2_ID');
-        $char2_ID = filter_input(INPUT_POST, "char2_ID");
-        $winner_ID = filter_input(INPUT_POST, "winner_ID");
-        $record_name = $_SESSION["player_name"];
-
+        $player2_opening = filter_input(INPUT_POST, 'player2_opening');
+        $winner_ID = filter_input(INPUT_POST, 'winner_ID');
+        $record_name = $_SESSION["user_id"];
+        $valid_white_openings = [''];
+        $valid_black_openings = [''];
         // Initialize variables for later
-        $loser_ID;
-        $loser_charID;
-        $winner_charID;
         $winner_name;
         $error_message = ''; 
         $isValid = true;
 
         // Validating the input
-        if (empty($player1_ID) || empty($char1_ID) || empty($player2_ID) || empty($char2_ID) ||
+        if (empty($player1_ID) || empty($player1_opening) || empty($player2_ID) || empty($player2_opening) ||
         empty($winner_ID) )  {
             $error_message = "Invalid match data! Make sure all fields are filled.";
             $isValid = false;
@@ -79,52 +67,47 @@ switch ($action) {
             $isValid = true;
         }
 
-        if (is_numeric($player1_ID) || is_numeric($char1_ID) || is_numeric($player2_ID) || is_numeric($char2_ID) ||
-        is_numeric($winner_ID) )  {
+        if (is_numeric($player1_ID) is_numeric($player2_ID))  {
             $isValid = true;
         } else {
             $error_message = "Invalid match data! Make sure all fields are numbers.";
             $isValid = false;
         }
 
-        if ($winner_ID === $player1_ID || $winner_ID === $player2_ID) {
+        // if ($winner_ID === $player1_ID || $winner_ID === $player2_ID) {
 
-        } else {
-            $error_message = "Winner must be from the two players!";
-            $isValid = false;
-        }
+        // } else {
+        //     $error_message = "Winner must be from the two players!";
+        //     $isValid = false;
+        // }
         
         if ($player1_ID === $player2_ID){
             $error_message = "Cannot have the player play against the same player!";
             $isValid = false;
         }
 
-        if ($winner_ID === $player1_ID){
-            $loser_ID = $player2_ID;
-            $loser_charID = $char2_ID;
-            $winner_charID = $char1_ID;
-        } else {
-            $loser_ID = $player1_ID;
-            $loser_charID = $char1_ID;
-            $winner_charID = $char2_ID;
-        }
+        if(isset($_POST['draw']) && 
+        $_POST['draw'] === 'yes') 
+    {
+    $draw = true;
+    }
+    else
+    {
+    $draw = false;
+    }	 
 
 
-        if($isValid == true) {
+        if($isValid === true) {
             //Method calls to fetch the remaining data based on what was passed down.
             $record_ID = MatchDB::getRecorderID($record_name);
             $player1_name = MatchDB::getPlayerName($player1_ID);
-            $char1_name = MatchDB::getCharName($char1_ID);
             $player2_name = MatchDB::getPlayerName($player2_ID);
-            $char2_name = MatchDB::getCharName($char2_ID);
             $winner_name = MatchDB::getPlayerName($winner_ID);
             // This is the call to input all the data created
-            $i = new Match($player1_name[0], $player1_ID, $char1_name[0], $player2_name[0], $player2_ID, $char2_name[0], $winner_ID, $loser_ID, $record_ID[0]);
+            $i = new Match($player1_name[0], $player1_ID, $player1_opening, $player2_name[0], $player2_ID, $player2_opening, $winner_ID, $record_ID[0]);
             MatchDB::addMatch($i);
             MatchDB::set_PlayerWin($winner_ID);
             MatchDB::set_PlayerLoss($loser_ID);
-            MatchDB::set_CharWin($winner_charID);
-            MatchDB::set_CharLoss($loser_charID);
             include('confirmation.php');
         } else{
             include('record.php');
@@ -142,7 +125,7 @@ switch ($action) {
         $loser = MatchDB::find_loss_from_match($match_id);
         $recorder = MatchDB::find_recorder_from_match($match_id);
         // Check to see if the ID of the recorder is the same as the ID of the person trying to delete.
-        $deleter_name = $_SESSION["player_name"];
+        $deleter_name = $_SESSION["user_id"];
         $deleter_ID = MatchDB::getPlayerID($deleter_name);
         if($deleter_ID[0] === $recorder[0]){
             if ($player1[0] === $winner[0]){

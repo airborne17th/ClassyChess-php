@@ -13,7 +13,7 @@ class UserDB {
       foreach($rows as $row) {
           $i = new User(
             $row['firstName'], $row['lastName'], $row['user_id'], $row['usertype'], $row['email'],
-            $row['password'], $row['win'], $row['total'], $row['newsletter']);
+            $row['password'], $row['win'], $row['total'], $row['newsletter'], $row['elo']);
           $i->setID($row['id']);
           $users[] = $i;
       }
@@ -24,9 +24,9 @@ class UserDB {
     $db = Database::getDB();
     
     $query = 'INSERT INTO users
-                 (firstName, lastName, user_id, usertype, email, password, win, total, newsletter)
+                 (firstName, lastName, user_id, usertype, email, password, win, total, newsletter, elo)
               VALUES
-                 (:first_name, :last_name, :user_id, :usertype, :email, :password, :win, :total, :newsletter)';
+                 (:first_name, :last_name, :user_id, :usertype, :email, :password, :win, :total, :newsletter, :elo)';
     $statement = $db->prepare($query);
     $statement->bindValue(':first_name', $i->getFirstName());
     $statement->bindValue(':last_name', $i->getLastName());
@@ -37,6 +37,7 @@ class UserDB {
     $statement->bindValue(':win', $i->getWin());
     $statement->bindValue(':total', $i->getTotal());
     $statement->bindValue(':newsletter', $i->getNewsletter());
+    $statement->bindValue(':elo', $i->getELO());
     $statement->execute();
     $statement->closeCursor();
 }

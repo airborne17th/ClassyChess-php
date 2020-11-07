@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 30, 2020 at 08:51 PM
+-- Generation Time: Nov 07, 2020 at 05:22 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -32,7 +32,7 @@ CREATE TABLE `gallery` (
   `id` int(4) NOT NULL,
   `image` varchar(256) NOT NULL,
   `comment` varchar(1000) NOT NULL,
-  `commenterID` int(4) NOT NULL
+  `userID` int(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -69,8 +69,20 @@ CREATE TABLE `users` (
   `password` varchar(256) NOT NULL,
   `win` int(6) NOT NULL DEFAULT 0,
   `total` int(6) NOT NULL DEFAULT 0,
-  `newsletter` tinyint(1) NOT NULL DEFAULT 0
+  `newsletter` tinyint(1) NOT NULL DEFAULT 0,
+  `elo` int(5) DEFAULT 1000
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `firstName`, `lastName`, `user_id`, `usertype`, `email`, `password`, `win`, `total`, `newsletter`, `elo`) VALUES
+(1, 'Sandra', 'Mathews', 1, 1, 'smathews@NebrWesleyan.edu', '$2y$10$Z46ZGt6pL64/O.fEEzhp5uLGEwL/azzkCinKIegETw.B.6eo9T4ui', 0, 0, 0, 1000),
+(2, 'John', 'Kyker', 72030, 3, 'acepilotjohn@hotmail.com', '$2y$10$nZMlgfIRCqq8JTv177gmc.pr/1Th/CgJIhnP5naMOGVgYNPK6OcK2', 0, 0, 0, 1000),
+(3, 'Jordan', 'Lotterman', 99552, 3, 'bestbuy@gmail.com', '$2y$10$W7EOYaVkq2kmuXajaL7VieLIYd7pj3.sGPb5b1IVZdQlnaKnixDcC', 0, 0, 0, 1000),
+(4, 'Bill', 'Gates', 83729, 1, 'billygates@icloud.com', '$2y$10$h6/yE5rQs2NuZFJ4Z1M5OeSgiIgPWOEqwuU9HKVCTd34ZhL2QNc8O', 0, 0, 1, 1000),
+(5, 'Mark', 'Gudgel', 90405, 1, 'wolf300@icloud.com', '$2y$10$Br/VtmK409x9ZtGdrdlaTe7mji9yVxiHeeG0k9V5BHdqnrG20KYb6', 0, 0, 1, 1000);
 
 --
 -- Indexes for dumped tables
@@ -114,7 +126,7 @@ ALTER TABLE `matches`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

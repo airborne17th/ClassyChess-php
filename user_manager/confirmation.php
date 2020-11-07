@@ -27,11 +27,11 @@ require_once '../view/header.php';
             <p>Email: <?php echo $email; ?></p>
             <p>UserID: <?php echo $userID; ?></p>
             <p>Password: <?php echo $passTest; ?></p>
-      <p>Do you want to subscribe to our newsletter?</p>
+      <!-- <p>Do you want to subscribe to our newsletter?</p>
       <form action="index.php" method="POST">
       <input type="submit" value="Subscribe!" />
       <input type="hidden" name="action" value="news_sub"/>
-      </form>
+      </form> -->
       </div>
      </main>
      

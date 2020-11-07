@@ -1,8 +1,8 @@
 <?php
 class User {
-    private $id, $first_name, $last_name, $user_id, $usertype, $email, $password, $win, $total, $newsletter;
+    private $id, $first_name, $last_name, $user_id, $usertype, $email, $password, $win, $total, $newsletter, $elo;
 
-    public function __construct($first_name, $last_name, $user_id, $usertype, $email, $password, $win, $total, $newsletter) {
+    public function __construct($first_name, $last_name, $user_id, $usertype, $email, $password, $win, $total, $newsletter, $elo) {
         $this->first_name = $first_name;
         $this->last_name = $last_name;
         $this->user_id = $user_id;
@@ -12,6 +12,7 @@ class User {
         $this->win = $win;
         $this->total = $total;
         $this->newsletter = $newsletter;
+        $this->elo = $elo;
     }
 
     public function getID() {
@@ -86,6 +87,13 @@ class User {
     }
     public function setTotal($value) {
         $this->total = $value;
+    }
+
+    public function getELO() {
+        return $this->elo;
+    }
+    public function setELO($value) {
+        $this->elo = $value;
     }
 }
 ?>

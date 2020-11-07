@@ -24,6 +24,7 @@ require_once '../view/header.php';
                 <th>Email</th>                
                 <th>Wins</th>
                 <th>Total</th>
+                <th>ELO</th>
             </tr>
             <?php foreach ($users as $user) : ?>
                 <tr>
@@ -32,6 +33,7 @@ require_once '../view/header.php';
                     <td><?php echo htmlspecialchars($user->getEmail()); ?></td>
                     <td><?php echo htmlspecialchars($user->getWin()); ?></td>
                     <td><?php echo htmlspecialchars($user->getTotal()); ?></td>
+                    <td><?php echo htmlspecialchars($user->getELO()); ?></td>
                 </tr>
             <?php endforeach; ?>
         </table>

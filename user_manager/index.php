@@ -106,7 +106,7 @@ switch ($action) {
                 }
                         
     if(isset($_POST['newsletter']) && 
-        $_POST['newsletter'] === 'Yes') 
+        $_POST['newsletter'] === 'yes') 
     {
     $newsletter = 1;
     }
@@ -123,12 +123,13 @@ switch ($action) {
             $user_type = 1;
             $win = 0;
             $total = 0;
+            $elo = 1000;
             // Make the password being tested the final password
             $password = $passTest;
             // Hash it for the server and pass it back to the password
             $hash = password_hash ( $password , PASSWORD_BCRYPT );
             $password = $hash;
-            $i = new User($first_name, $last_name, $userID, $user_type, $email, $password, $win, $total, $newsletter);
+            $i = new User($first_name, $last_name, $userID, $user_type, $email, $password, $win, $total, $newsletter, $elo);
             UserDB::addUser($i);
             // Create the Session to validate the player is logged in and track user ID and type
             $_SESSION["user_id"] = $userID;
