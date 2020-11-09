@@ -24,6 +24,16 @@ require_once './view/header.php';
   <div class="container">
     <div class="row">
       <div class="col-lg-8 col-md-10 mx-auto">
+      <div class="post-preview">
+            <h2 class="post-title">
+             Our Business
+            </h2>
+            <h3 class="post-subtitle">
+            <p>Address: 330 S 21st St, Lincoln, NE 68510</p>
+            <p>Business Hours: 6AM–9PM Daily.</p>
+            </h3>
+        </div>
+        <hr>
         <div class="post-preview">
           <a href="post.html">
             <h2 class="post-title">

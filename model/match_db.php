@@ -130,6 +130,28 @@ class MatchDB {
         return $player_ID;
     }
 
+    public static function find_player1_from_match($entry) {
+        $db = Database::getDB();
+        $query = 'SELECT player1_ID FROM matches WHERE matchID = :entry';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':entry', $entry);
+        $statement->execute();
+        $player = $statement->fetch();
+        $statement->closeCursor();
+        return $player;
+    }
+
+    public static function find_player2_from_match($entry) {
+        $db = Database::getDB();
+        $query = 'SELECT player1_ID FROM matches WHERE matchID = :entry';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':entry', $entry);
+        $statement->execute();
+        $player = $statement->fetch();
+        $statement->closeCursor();
+        return $player;
+    }
+
     public static function find_winner_from_match($entry) {
         $db = Database::getDB();
         $query = 'SELECT winner_ID FROM matches WHERE matchID = :entry';
@@ -185,6 +207,5 @@ class MatchDB {
         $statement->execute();
         $statement->closeCursor();
     }
-
 }
 ?>

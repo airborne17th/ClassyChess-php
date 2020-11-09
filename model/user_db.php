@@ -149,6 +149,15 @@ class UserDB {
         return $usertype;
     }
 
+    public static function deletePassword($entry) {
+        $db = Database::getDB();
+        $query = 'DELETE password FROM users WHERE user_id = :entry';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':entry', $entry);
+        $statement->execute();
+        $statement->closeCursor();
+    }
+
     public static function getUserID($entry) {
         $db = Database::getDB();
         $query = 'SELECT user_id FROM users WHERE email = :entry';
@@ -159,6 +168,18 @@ class UserDB {
         $statement->closeCursor();
         return $userID;
     }
+
+    public static function getUsersByNewsletter() {
+        $db = Database::getDB();
+        $query = 'SELECT * FROM users WHERE newsletter = 1';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':entry', $userEntry);
+        $statement->execute();
+        $results = $statement->fetch();
+        $statement->closeCursor();
+        return $results;
+    }
+    
 }
 ?>
 
