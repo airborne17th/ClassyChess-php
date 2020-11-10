@@ -59,7 +59,46 @@ require_once '../view/header.php';
                 </tr>
             <?php endforeach; ?>
         </table>
+        <section>
+        <h2>List of Matches</h2>
+    <table>
+        <tr>
+            <th>P1 Name</th>
+            <th>P1 ID</th>
+            <th>P1 Opening</th>
+            <th>&nbsp; &nbsp; &nbsp;</th>
+            <th>P2 Name</th>
+            <th>P2 ID</th>
+            <th>P2 Opening</th>
+            <th>&nbsp; &nbsp; &nbsp;</th>
+            <th>Winner ID</th>
+        </tr>
+        <?php foreach ($matches as $match) : ?>
+            <tr>
+                <td><?php echo htmlspecialchars($match->getPlayer1_Name()); ?></td>
+                <td><?php echo htmlspecialchars($match->getPlayer1_ID()); ?></td>
+                <td><?php echo htmlspecialchars($match->getPlayer1_Opening()); ?></td>
+                <td>&nbsp;</td>
+                <td><?php echo htmlspecialchars($match->getPlayer2_Name()); ?></td>
+                <td><?php echo htmlspecialchars($match->getPlayer2_ID()); ?></td>
+                <td><?php echo htmlspecialchars($match->getPlayer2_Opening()); ?></td>
+                <td>&nbsp;</td>
+                <td><?php echo htmlspecialchars($match->getWinner_ID()); ?></td>
+                <td>
+                    <form action="." method="post">
+                    <input type="hidden" name="action"
+                       value="delete_match">
+                    <input type="hidden" name="match_id"
+                       value="<?php echo htmlspecialchars($match->getMatchID()); ?>">
+                    <input type="submit" name="submit" value="Delete"> 
+                    </form>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+</section>
             </div>
+         
      </main>
     </body>
 <?php require_once '../view/footer.php'; ?> 

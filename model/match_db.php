@@ -178,5 +178,29 @@ class MatchDB {
         $statement->execute();
         $statement->closeCursor();
     }
+
+    public static function getMatchesByID($entry) {
+        $db = Database::getDB();
+  
+        $query = 'SELECT * FROM matches
+                  WHERE player1_id = :entry OR player2_id = :entry
+                  ORDER BY id';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':entry', $entry);
+        $statement->execute();
+        $rows = $statement->fetchAll();
+        $statement->closeCursor();
+        $matches = array();
+        foreach($rows as $row) {
+            $i = new Match(
+                    $row['player1_name'], $row['player1_id'], $row['player1_opening'],
+                    $row['player2_name'], $row['player2_id'], $row['player2_opening'],
+                    $row['winner_id'], $row['recorder_id']
+                );
+            $i->setMatchID($row['id']);
+            $matches[] = $i;
+        }
+        return $matches;
+    }
 }
 ?>

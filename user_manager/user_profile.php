@@ -51,7 +51,36 @@ require_once '../view/header.php';
       <form action="index.php" method="POST">
       <input type="submit" value="Log Off!" />
       <input type="hidden" name="action" value="logoff"/>
-      </form>
+      </form><br>
+      <section>
+        <h3>Your Matches</h3>
+    <table>
+        <tr>
+            <th>P1 Name</th>
+            <th>P1 ID</th>
+            <th>P1 Opening</th>
+            <th>&nbsp; &nbsp; &nbsp;</th>
+            <th>P2 Name</th>
+            <th>P2 ID</th>
+            <th>P2 Opening</th>
+            <th>&nbsp; &nbsp; &nbsp;</th>
+            <th>Winner ID</th>
+        </tr>
+        <?php foreach ($matches as $match) : ?>
+            <tr>
+                <td><?php echo htmlspecialchars($match->getPlayer1_Name()); ?></td>
+                <td><?php echo htmlspecialchars($match->getPlayer1_ID()); ?></td>
+                <td><?php echo htmlspecialchars($match->getPlayer1_Opening()); ?></td>
+                <td>&nbsp;</td>
+                <td><?php echo htmlspecialchars($match->getPlayer2_Name()); ?></td>
+                <td><?php echo htmlspecialchars($match->getPlayer2_ID()); ?></td>
+                <td><?php echo htmlspecialchars($match->getPlayer2_Opening()); ?></td>
+                <td>&nbsp;</td>
+                <td><?php echo htmlspecialchars($match->getWinner_ID()); ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+</section>
    </div>
    </body>
 <?php require_once '../view/footer.php'; ?> 

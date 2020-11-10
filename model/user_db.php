@@ -180,6 +180,16 @@ class UserDB {
         return $results;
     }
     
+    public static function getMatchesByUser($entry) {
+        $db = Database::getDB();
+        $query = 'SELECT * FROM matches WHERE player1_id = :entry OR player2_id = :entry';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':entry', $entry);
+        $statement->execute();
+        $results = $statement->fetch();
+        $statement->closeCursor();
+        return $results;
+    }
 }
 ?>
 

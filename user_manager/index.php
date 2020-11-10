@@ -2,6 +2,8 @@
 require('../model/database.php');
 require('../model/user.php');
 require('../model/user_db.php');
+require('../model/match.php');
+require('../model/match_db.php');
 session_start();
 $action = filter_input(INPUT_POST, 'action');
 if ($action === NULL) {
@@ -205,6 +207,7 @@ switch ($action) {
             include('registration.php');
         } else {
             $user_display = $_SESSION["user_id"];
+            $matches = MatchDB::getMatchesByID($user_display);
             include('user_profile.php');
         }
     break;
@@ -274,6 +277,7 @@ switch ($action) {
         $user_display = $_SESSION["user_id"];
         if($userTest[0] === '3'){
             $users = UserDB::getUsers();
+            $matches = MatchDB::getMatches();
             include('admin.php');
         } else{
             $pass_message = '';
@@ -324,6 +328,38 @@ switch ($action) {
         $pass_message = '';
         $user_message = 'Sorry, to see you go. You are unsubbed.';
         include('user_profile.php');
-    break;        
+    break;     
+    case 'delete_match':
+        $user = $_SESSION["user_id"];
+        $userTest = UserDB::authenticationUserType($user);
+        $user_display = $_SESSION["user_id"];
+        $match_id = filter_input(INPUT_POST, 'match_id', FILTER_VALIDATE_INT);
+        $player1 = MatchDB::find_player1_from_match($match_id);
+        $player2 = MatchDB::find_player2_from_match($match_id);
+        $winner = MatchDB::find_winner_from_match($match_id);
+        if($userTest[0] === '3'){
+            if($winner[0] === NULL){
+                MatchDB::reset_PlayerGame($player1[0]);
+                MatchDB::reset_PlayerGame($player2[0]);
+                MatchDB::deleteMatch($match_id);
+            } else{
+                if($winner[0] === $player1[0]){
+                    MatchDB::reset_PlayerWin($player1[0]);
+                    MatchDB::reset_PlayerGame($player2[0]);
+                    MatchDB::deleteMatch($match_id);
+                } else {
+                    MatchDB::reset_PlayerWin($player2[0]);
+                    MatchDB::reset_PlayerGame($player1[0]);
+                    MatchDB::deleteMatch($match_id);
+                }
+            }
+            include('../match_manager/delete_confirmation.php');
+        } else{
+            $user_message = 'Sorry, only admins can delete matches.';
+            $users = UserDB::getUsers();
+            $matches = MatchDB::getMatches();
+            include('admin.php');
+        }
+        break;   
 }
 ?>

@@ -44,15 +44,6 @@ require_once '../view/header.php';
                 <td><?php echo htmlspecialchars($match->getPlayer2_Opening()); ?></td>
                 <td>&nbsp;</td>
                 <td><?php echo htmlspecialchars($match->getWinner_ID()); ?></td>
-                <td>
-                    <form action="." method="post">
-                    <input type="hidden" name="action"
-                       value="delete_match">
-                    <input type="hidden" name="match_id"
-                       value="<?php echo htmlspecialchars($match->getMatchID()); ?>">
-                    <input type="submit" name="submit" value="Delete"> 
-                    </form>
-                </td>
             </tr>
         <?php endforeach; ?>
     </table>
