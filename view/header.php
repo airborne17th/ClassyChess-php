@@ -30,13 +30,13 @@
         <li class="nav-item"><a href="<?php echo $pathcor; ?>home_manager?action=about">About</a></li>
         <li class="nav-item"><a href="<?php echo $pathcor; ?>home_manager?action=contact">Contact</a></li>
         <li class="nav-item"><a href="<?php echo $pathcor; ?>gallery_manager?action=initial">Gallery</a></li>
-        <li class="nav-item"><a href="<?php echo $pathcor; ?>match_manager?action=list_matches">Matches</a></li>
         <li class="nav-item"><a href="<?php echo $pathcor; ?>user_manager?action=list_user">Directory</a></li>
+        <li class="nav-item"><a href="<?php echo $pathcor; ?>match_manager?action=list_matches">Matches</a></li>
         <?php
                     if (isset($_SESSION["user_id"]) && $_SESSION["user_id"] !== "!") {
                         // Logged User
-                        echo'<li class="nav-item active"><a href="'. $pathcor . 'user_manager?action=admin">Admin</a></li>';
                         echo'<li class="nav-item active"><a href="'. $pathcor . 'match_manager?action=record">Record</a></li>';
+                        echo'<li class="nav-item active"><a href="'. $pathcor . 'user_manager?action=admin">Admin</a></li>';
                         echo'<li class="nav-item active"><a href="'. $pathcor . 'user_manager?action=profile">Profile</a></li>';
                         echo'<li class="nav-item active"><a href="'. $pathcor . 'user_manager?action=logoff">Logoff</a></li>';
                     }else{

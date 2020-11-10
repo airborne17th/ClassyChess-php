@@ -27,7 +27,6 @@ require_once '../view/header.php';
       </div>
     </div>
   </div>
-<?php echo $_SESSION["user_id"]; ?>
   <hr>
   <?php require_once '../view/footer.php'; ?> 
 </body>

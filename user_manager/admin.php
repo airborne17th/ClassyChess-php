@@ -23,14 +23,23 @@ require_once '../view/header.php';
         <h2>Admin Powers</h2>
         <form action="index.php" method="POST">
       <span class="error"><?php echo $type_message ?></span><br>
+      <p>Change User Type</p>
          <input type="hidden" name="action" value="changeUserType"/>
          <label>UserID: </label><br>
         <input type="text" name="user" placeholder="Which UserID"><br>
-        <label>Change UserType: </label><br>
+        <label>UserType: </label><br>
         <span>[1: User | 2: Contributor | 3: Admin]</span><br>
         <input type="number" name="newtype" min="1" max="3" placeholder=""><br><br>
          <input type="submit" value="Submit"><br>
-      </form>
+      </form><br>
+      <form action="index.php" method="POST">
+      <p>Reset Password (Default temp password is "password")</p>
+      <span class="error"><?php echo $pass_message ?></span><br>
+         <input type="hidden" name="action" value="resetPassword"/>
+         <label>UserID: </label><br>
+        <input type="text" name="user" placeholder="Which UserID"><br>
+         <input type="submit" value="Submit"><br>
+      </form><br>
         <h2>List of Users</h2>
         <table>
         <tr>

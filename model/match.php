@@ -56,11 +56,11 @@ class Match {
     }
 
     public function getPlayer2_Opening() {
-        return $this->char2_name;
+        return $this->player1_opening;
     }
 
     public function setPlayer2_Opening($value) {
-        $this->char2_name = $value;
+        $this->player1_opening = $value;
     }
 
     public function getWinner_ID() {

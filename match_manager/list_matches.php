@@ -4,35 +4,46 @@ $pathcor = "../";
 require_once '../view/header.php';
 ?>
 <main>
-
+<header class="masthead" id="match_masthead">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="page-heading">
+            <h1>List of Matches</h1>
+            <span class="subheading">View a record of matches completed.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-md-10 mx-auto"> 
 <section>
     <table>
         <tr>
-            <th>Player 1 Name</th>
-            <th>Player 1 ID</th>
-            <th>Character 1 Name</th>
+            <th>P1 Name</th>
+            <th>P1 ID</th>
+            <th>P1 Opening</th>
             <th>&nbsp; &nbsp; &nbsp;</th>
-            <th>Player 2 Name</th>
-            <th>Player 2 ID</th>
-            <th>Character 2 Name</th>
+            <th>P2 Name</th>
+            <th>P2 ID</th>
+            <th>P2 Opening</th>
             <th>&nbsp; &nbsp; &nbsp;</th>
             <th>Winner ID</th>
-            <th>Loss ID</th>
-            <th>Recorder ID</th>
         </tr>
         <?php foreach ($matches as $match) : ?>
             <tr>
                 <td><?php echo htmlspecialchars($match->getPlayer1_Name()); ?></td>
                 <td><?php echo htmlspecialchars($match->getPlayer1_ID()); ?></td>
-                <td><?php echo htmlspecialchars($match->getChar1_Name()); ?></td>
+                <td><?php echo htmlspecialchars($match->getPlayer1_Opening()); ?></td>
                 <td>&nbsp;</td>
                 <td><?php echo htmlspecialchars($match->getPlayer2_Name()); ?></td>
                 <td><?php echo htmlspecialchars($match->getPlayer2_ID()); ?></td>
-                <td><?php echo htmlspecialchars($match->getChar2_Name()); ?></td>
+                <td><?php echo htmlspecialchars($match->getPlayer2_Opening()); ?></td>
                 <td>&nbsp;</td>
                 <td><?php echo htmlspecialchars($match->getWinner_ID()); ?></td>
-                <td><?php echo htmlspecialchars($match->getLoss_ID()); ?></td>
-                <td><?php echo htmlspecialchars($match->getRecorderID()); ?></td>
                 <td>
                     <form action="." method="post">
                     <input type="hidden" name="action"
@@ -46,4 +57,7 @@ require_once '../view/header.php';
         <?php endforeach; ?>
     </table>
 </section>
+</div>
+</div>
+</div>
 <?php require_once '../view/footer.php'; ?> 

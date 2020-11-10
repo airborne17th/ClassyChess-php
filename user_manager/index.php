@@ -268,6 +268,7 @@ switch ($action) {
         break;        
     case 'admin' :
         $type_message = '';
+        $pass_message = '';
         $user = $_SESSION["user_id"];
         $userTest = UserDB::authenticationUserType($user);
         $user_display = $_SESSION["user_id"];
@@ -285,6 +286,7 @@ switch ($action) {
     case 'changeUserType':
         $userID = filter_input(INPUT_POST, "user");
         $usertype = filter_input(INPUT_POST, "newtype");
+        $pass_message = '';
         $user = $_SESSION["user_id"];
         $users = UserDB::getUsers();
         if($user === $userID){
@@ -293,6 +295,16 @@ switch ($action) {
             UserDB::changeUserType($usertype, $userID);
             $type_message = 'User changed successfully.';
         }
+        include('admin.php');
+    break;
+    case 'resetPassword':
+        $userID = filter_input(INPUT_POST, "user");
+        $type_message = '';
+        $password = 'password';
+        $users = UserDB::getUsers();
+        $hash = password_hash ( $password , PASSWORD_BCRYPT );
+        UserDB::changePassword($hash, $userID);
+        $pass_message = "Password successfully updated";
         include('admin.php');
     break;
     case 'news_sub' :

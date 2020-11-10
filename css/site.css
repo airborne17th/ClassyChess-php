@@ -455,6 +455,10 @@ nav {
   background-image: url('../img/admin-bg.jpg');
 }
 
+#match_masthead{
+  background-image: url('../img/match-bg.jpg');
+}
+
 .error{
   color: red; 
 }
