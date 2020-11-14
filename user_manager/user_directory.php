@@ -17,6 +17,7 @@ require_once '../view/header.php';
       </div>
     </div>
   </header>
+  <h1>List of Players</h1>
   <table>
             <tr>
                 <th>Name</th>
@@ -38,6 +39,27 @@ require_once '../view/header.php';
             <?php endforeach; ?>
         </table>
   <hr>
+  <h1>Top Players</h1>
+  <table>
+            <tr>
+                <th>Name</th>
+                <th>UserID</th>
+                <th>Email</th>                
+                <th>Wins</th>
+                <th>Total</th>
+                <th>ELO</th>
+            </tr>
+            <?php foreach ($top_users as $user) : ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($user->getFullName()); ?></td>
+                    <td><?php echo htmlspecialchars($user->getUserID()); ?></td>
+                    <td><?php echo htmlspecialchars($user->getEmail()); ?></td>
+                    <td><?php echo htmlspecialchars($user->getWin()); ?></td>
+                    <td><?php echo htmlspecialchars($user->getTotal()); ?></td>
+                    <td><?php echo htmlspecialchars($user->getELO()); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
   <?php require_once '../view/footer.php'; ?> 
 </body>
 </html>

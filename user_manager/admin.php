@@ -56,6 +56,15 @@ require_once '../view/header.php';
                     <td><?php echo htmlspecialchars($user->getEmail()); ?></td>
                     <td><?php echo htmlspecialchars($user->getNewsletter()); ?></td>
                     <td><?php echo htmlspecialchars($user->getUserType()); ?></td>
+                    <td>
+                    <form action="." method="post">
+                    <input type="hidden" name="action"
+                       value="delete_user">
+                    <input type="hidden" name="user_id"
+                       value="<?php echo htmlspecialchars($user->getID()); ?>">
+                    <input type="submit" name="submit" value="Delete"> 
+                    </form>
+                </td>
                 </tr>
             <?php endforeach; ?>
         </table>

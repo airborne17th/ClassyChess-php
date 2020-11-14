@@ -179,16 +179,34 @@ class UserDB {
         $statement->closeCursor();
         return $results;
     }
-    
-    public static function getMatchesByUser($entry) {
+
+    public static function deleteUser($entry) {
         $db = Database::getDB();
-        $query = 'SELECT * FROM matches WHERE player1_id = :entry OR player2_id = :entry';
+
+        $query = 'DELETE FROM users
+                 WHERE id = :entry';
         $statement = $db->prepare($query);
         $statement->bindValue(':entry', $entry);
         $statement->execute();
-        $results = $statement->fetch();
         $statement->closeCursor();
-        return $results;
+    }
+
+    public static function getUsersTop() {
+        $db = Database::getDB();
+        $query = 'SELECT * FROM users ORDER BY win DESC LIMIT 3';
+        $statement = $db->prepare($query);
+        $statement->execute();
+        $rows = $statement->fetchAll();
+        $statement->closeCursor();
+        $users = array();
+        foreach($rows as $row) {
+            $i = new User(
+              $row['firstName'], $row['lastName'], $row['user_id'], $row['usertype'], $row['email'],
+              $row['password'], $row['win'], $row['total'], $row['newsletter'], $row['elo']);
+            $i->setID($row['id']);
+            $users[] = $i;
+        }
+        return $users;
     }
 }
 ?>

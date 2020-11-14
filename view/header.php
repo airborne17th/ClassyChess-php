@@ -29,7 +29,7 @@
         <li class="nav-item"><a href="<?php echo $pathcor; ?>index.php">Home</a></li>
         <li class="nav-item"><a href="<?php echo $pathcor; ?>home_manager?action=about">About</a></li>
         <li class="nav-item"><a href="<?php echo $pathcor; ?>home_manager?action=contact">Contact</a></li>
-        <li class="nav-item"><a href="<?php echo $pathcor; ?>gallery_manager?action=initial">Gallery</a></li>
+        <li class="nav-item"><a href="<?php echo $pathcor; ?>gallery_manager?action=view">Gallery</a></li>
         <li class="nav-item"><a href="<?php echo $pathcor; ?>user_manager?action=list_user">Directory</a></li>
         <li class="nav-item"><a href="<?php echo $pathcor; ?>match_manager?action=list_matches">Matches</a></li>
         <?php

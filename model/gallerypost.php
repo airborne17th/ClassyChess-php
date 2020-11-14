@@ -1,9 +1,11 @@
 <?php 
 class GalleryPost {
-            private $id, $image, $comment, $commenterID;
+            private $id, $image, $comment, $userID;
         
-            public function __construct($image, $comment, $recorder_id) {
+            public function __construct($image, $comment, $userID) {
                 $this->image = $image;
+                $this->comment = $comment;
+                $this->userID = $userID;
             }
         
             public function getID() {
@@ -27,11 +29,11 @@ class GalleryPost {
                 $this->comment = $value;
             }
 
-            public function getRecorderID() {
-                return $this->recorder_id;
+            public function getUserID() {
+                return $this->userID;
             }
-            public function setRecorderID($value) {
-                $this->recorder_id = $value;
+            public function setUserID($value) {
+                $this->userID = $value;
             }
     }
 ?>

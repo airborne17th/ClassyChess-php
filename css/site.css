@@ -459,6 +459,10 @@ nav {
   background-image: url('../img/match-bg.jpg');
 }
 
+#gallery_masthead{
+  background-image: url('../img/gallery-bg.jpg');
+}
+
 .error{
   color: red; 
 }

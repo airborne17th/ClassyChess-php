@@ -35,37 +35,31 @@ require_once './view/header.php';
         </div>
         <hr>
         <div class="post-preview">
-          <a href="post.html">
             <h2 class="post-title">
               Chess Leagues
             </h2>
             <h3 class="post-subtitle">
               Come join our friendly community as we host our weekly chess leagues on the weekends. Seasonal knock out touraments are held for the top players!
             </h3>
-          </a>
         </div>
         <hr>
         <div class="post-preview">
-          <a href="post.html">
             <h2 class="post-title">
               Gallery
             </h2>
             <h3 class="post-subtitle">
               See some photos of the coffee shop and learn more about the stories behind our gallery.
             </h3>
-          </a>
           <img src="img/sample_post.jpg" alt="An example of gallery">
         </div>
         <hr>
         <div class="post-preview">
-          <a href="post.html">
             <h2 class="post-title">
               Newsletter
             </h2>
             <h3 class="post-subtitle">
               Sign up for our monthly newsletter about chess, coffee, local news, and other topics. We also include articles contributed by readers like you!
             </h3>
-          </a>
         </div>
         <hr>
         <form>

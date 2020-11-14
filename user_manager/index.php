@@ -15,6 +15,7 @@ if ($action === NULL) {
 switch ($action) {
     case 'list_user':
         $users = UserDB::getUsers();
+        $top_users = UserDB::getUsersTop();
         include('user_directory.php');
         break;
     case 'registration':
@@ -329,6 +330,15 @@ switch ($action) {
         $user_message = 'Sorry, to see you go. You are unsubbed.';
         include('user_profile.php');
     break;     
+    case 'delete_user':
+        $type_message = 'User Deleted!';
+        $pass_message = '';
+        $users = UserDB::getUsers();
+        $matches = MatchDB::getMatches();
+        $user_id = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
+        UserDB::deleteUser($user_id);
+        include('admin.php');
+    break;
     case 'delete_match':
         $user = $_SESSION["user_id"];
         $userTest = UserDB::authenticationUserType($user);

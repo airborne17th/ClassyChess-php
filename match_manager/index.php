@@ -14,7 +14,7 @@ if ($action === NULL) {
 }
 switch ($action) {
     case 'list_matches':
-        $matches = MatchDB::getMatches();
+        $matches = MatchDB::getMatches();  
         include('list_matches.php');
         break;
     case 'record':
