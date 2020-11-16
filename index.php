@@ -50,7 +50,7 @@ require_once './view/header.php';
             <h3 class="post-subtitle">
               See some photos of the coffee shop and learn more about the stories behind our gallery.
             </h3>
-          <img src="img/sample_post.jpg" alt="An example of gallery">
+          <img src="img/sample_post.jpg" alt="An example of gallery" height="480" width="720">
         </div>
         <hr>
         <div class="post-preview">
@@ -71,6 +71,15 @@ require_once './view/header.php';
           <a class="btn btn-primary float-right" href="#">Sign Up!</a>
         </div>
         </form>
+        <br><br><br>
+        <iframe
+    src="https://player.twitch.tv/?channel=harlemknite&parent=localhost&muted=true"
+    height="480"
+    width="720"
+    frameborder="0"
+    scrolling="no"
+    allowfullscreen="true">
+</iframe>
       </div>
     </div>
   </div>
