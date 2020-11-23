@@ -134,6 +134,17 @@ class MatchDB {
         return $winner;
     }
 
+    public static function find_player_elo($entry) {
+        $db = Database::getDB();
+        $query = 'SELECT elo FROM users WHERE user_id = :entry';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':entry', $entry);
+        $statement->execute();
+        $result = $statement->fetch();
+        $statement->closeCursor();
+        return $result;
+    }
+
     public static function find_recorder_from_match($entry) {
         $db = Database::getDB();
         $query = 'SELECT recorder_id FROM matches WHERE id = :entry';

@@ -4,6 +4,7 @@ require('../model/user.php');
 require('../model/user_db.php');
 require('../model/match.php');
 require('../model/match_db.php');
+require('elo.php');
 session_start();
 $action = filter_input(INPUT_POST, 'action');
 if ($action === NULL) {
@@ -90,8 +91,49 @@ switch ($action) {
         if ($winner_ID === $player1_ID || $winner_ID === $player2_ID) {
             if ($winner_ID === $player1_ID){
                 $loser_ID = $player2_ID;
+
+            //     $winner_elo = MatchDB::find_player_elo($winner_ID);
+            //     $loser_elo = MatchDB::find_player_elo($loser_ID);
+
+            //     $elo = new Elo;
+
+            //     $player_a->rating = $winner_elo[0];
+            //     $player_b->rating = $loser_elo[0];
+            
+            //     // 0 for a lose, 1 for a win
+            //     $player_a->score = 1;
+            //     $player_b->score = 0;
+            
+            // list(
+            //     $player_a->new_rating, 
+            //     $player_b->new_rating
+            // ) = $elo->new_rating(
+            //     $player_a->rating, $player_b->rating, 
+            //     $player_a->score, $player_b->score
+            // );
+
             } else {
                 $loser_ID = $player1_ID;
+            //     $winner_elo = MatchDB::find_player_elo($winner_ID);
+            //     $loser_elo = MatchDB::find_player_elo($loser_ID);
+
+            //     $elo = new Elo;
+
+            //     $player_a->rating = $winner_elo;
+            //     $player_b->rating = $loser_elo;
+            
+            //     // 0 for a lose, 1 for a win
+            //     $player_a->score = 1;
+            //     $player_b->score = 0;
+            
+            // list(
+            //     $player_a->new_rating, 
+            //     $player_b->new_rating
+            // ) = $elo->new_rating(
+            //     $player_a->rating, $player_b->rating, 
+            //     $player_a->score, $player_b->score
+            // );
+
             }
         } else {
              $error_message = "Winner must be from the two players!";
@@ -100,6 +142,7 @@ switch ($action) {
     }
 
         if($isValid === true) {
+
             if($draw === false){
             //Method calls to fetch the remaining data based on what was passed down.
             $record_ID = $player_display;

@@ -32,7 +32,8 @@ require_once '../view/header.php'; ?>
                 <i class="fas fa-key fa-2x"></i>
                 <input type="text" placeholder="Password" name="password_entry" value="">
                 <input type="submit" name="submit" value="Sign in!"><br>
-                <p>Not a member? <a href="registration.php">Sign Up Here!</a></p>
+                <p>Not a member? <br> <a href="registration.php">Sign Up Here!</a></p>
+                <p><a href="password_recovery.php">Forgot your password?</a></p>
             </form>
        
         </div>

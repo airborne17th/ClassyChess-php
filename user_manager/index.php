@@ -371,5 +371,25 @@ switch ($action) {
             include('admin.php');
         }
         break;   
+        case 'pw_recovery':
+        $pw_recovery_message = '';
+        $email_address = filter_input(INPUT_POST, 'user_entry', FILTER_VALIDATE_EMAIL);
+        // Check for empty fields
+        if(empty($email_address) || !filter_var($email_address,FILTER_VALIDATE_EMAIL)) {
+            $pw_recovery_message = "No arguments Provided!";
+        include('password_recovery.php');
+        return false;
+        }
+        
+        // Create the email and send the message
+        $to = '$email_address'; // Add your email address inbetween the '' replacing yourname@yourdomain.com - This is where the form will send a message to.
+        $email_subject = "Password Recovery:  $name";
+        $email_body = "Your password is password";
+        $headers = "From: noreply.classychess@gmail.com\n"; // This is the email address the generated message will be from. We recommend using something like noreply@yourdomain.com.
+        $headers .= "Reply-To: $email_address";   
+        // mail($to,$email_subject,$email_body,$headers);
+        $$pw_recovery_message = "Message sent!";
+        include('password_recovery.php');
+        return true;     
 }
 ?>

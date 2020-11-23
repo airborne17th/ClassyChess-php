@@ -33,7 +33,7 @@ require_once '../view/header.php';
         <select name="white_opening" id="white_opening" required>
         <option value="NA">N/A</option> <option value="NF3">NF3</option> <option value="NH3">NH3</option> <option value="NA3">NA3</option> <option value="NC3">NC3</option> 
         <option value="A3">A3</option> <option value="B3">B3</option> <option value="C3">C3</option> <option value="D3">D3</option>
-        <option value="E1">E3</option> <option value="F3">F3</option> <option value="G3">G3</option> <option value="H3">H3</option>
+        <option value="E3">E3</option> <option value="F3">F3</option> <option value="G3">G3</option> <option value="H3">H3</option>
         <option value="A4">A4</option> <option value="B4">B4</option> <option value="C4">C4</option> <option value="D4">D4</option> 
         <option value="E4">E4</option> <option value="F4">F4</option> <option value="G4">G4</option> <option value="H4">H4</option>
         </select>
