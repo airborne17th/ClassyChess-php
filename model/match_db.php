@@ -145,6 +145,18 @@ class MatchDB {
         return $result;
     }
 
+    public static function update_player_elo($elo, $id) {
+        $db = Database::getDB();
+        $query = 'UPDATE users
+        SET elo = :elo
+        WHERE user_id = :id'; 
+        $statement = $db->prepare($query);
+        $statement->bindValue(':elo', $elo);
+        $statement->bindValue(':id', $id);
+        $statement->execute();
+        $statement->closeCursor();
+    }
+
     public static function find_recorder_from_match($entry) {
         $db = Database::getDB();
         $query = 'SELECT recorder_id FROM matches WHERE id = :entry';

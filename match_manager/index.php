@@ -92,48 +92,20 @@ switch ($action) {
             if ($winner_ID === $player1_ID){
                 $loser_ID = $player2_ID;
 
-            //     $winner_elo = MatchDB::find_player_elo($winner_ID);
-            //     $loser_elo = MatchDB::find_player_elo($loser_ID);
-
-            //     $elo = new Elo;
-
-            //     $player_a->rating = $winner_elo[0];
-            //     $player_b->rating = $loser_elo[0];
-            
-            //     // 0 for a lose, 1 for a win
-            //     $player_a->score = 1;
-            //     $player_b->score = 0;
-            
-            // list(
-            //     $player_a->new_rating, 
-            //     $player_b->new_rating
-            // ) = $elo->new_rating(
-            //     $player_a->rating, $player_b->rating, 
-            //     $player_a->score, $player_b->score
-            // );
+               $winner_elo = MatchDB::find_player_elo($winner_ID);
+               $loser_elo = MatchDB::find_player_elo($loser_ID);
+               
+               $winner_update = (float)$winner_elo[0] + 100;
+               $loser_update = (float)$loser_elo[0] - 100;
 
             } else {
                 $loser_ID = $player1_ID;
-            //     $winner_elo = MatchDB::find_player_elo($winner_ID);
-            //     $loser_elo = MatchDB::find_player_elo($loser_ID);
 
-            //     $elo = new Elo;
+                $winner_elo = MatchDB::find_player_elo($winner_ID);
+                $loser_elo = MatchDB::find_player_elo($loser_ID);
 
-            //     $player_a->rating = $winner_elo;
-            //     $player_b->rating = $loser_elo;
-            
-            //     // 0 for a lose, 1 for a win
-            //     $player_a->score = 1;
-            //     $player_b->score = 0;
-            
-            // list(
-            //     $player_a->new_rating, 
-            //     $player_b->new_rating
-            // ) = $elo->new_rating(
-            //     $player_a->rating, $player_b->rating, 
-            //     $player_a->score, $player_b->score
-            // );
-
+                $winner_update = (float)$winner_elo[0] + 100;
+                $loser_update = (float)$loser_elo[0] - 100;
             }
         } else {
              $error_message = "Winner must be from the two players!";
@@ -151,11 +123,19 @@ switch ($action) {
             $winner_name = MatchDB::getPlayerName($winner_ID);
             // This is the call to input all the data created
             $i = new Match($player1_name[0], $player1_ID, $player1_opening, $player2_name[0], $player2_ID, $player2_opening, $winner_ID, $record_ID);
+            MatchDB::update_player_elo($winner_update, $winner_ID);
+            MatchDB::update_player_elo($loser_update, $loser_ID);
             MatchDB::addMatch($i);
             MatchDB::set_PlayerWin($winner_ID);
             MatchDB::set_PlayerGame($loser_ID);
             include('confirmation.php');
             } else {
+                // Calc Draw Rating Update
+                $player1_elo = MatchDB::find_player_elo($player1_ID);
+                $player2_elo = MatchDB::find_player_elo($player2_ID);
+                $player1_update = (float)$player1_elo[0] + 50;
+                $player2_update = (float)$player2_elo[0] + 50;
+
                 $record_ID = $player_display;
                 $player1_name = MatchDB::getPlayerName($player1_ID);
                 $player2_name = MatchDB::getPlayerName($player2_ID);
@@ -165,6 +145,8 @@ switch ($action) {
                 MatchDB::addMatch($i);
                 MatchDB::set_PlayerGame($player1_ID);
                 MatchDB::set_PlayerGame($player2_ID);
+                MatchDB::update_player_elo($player1_update, $player1_ID);
+                MatchDB::update_player_elo($player2_update, $player2_ID);
                 include('confirmation.php');
             }
         } else {
