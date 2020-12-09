@@ -75,6 +75,7 @@ require_once '../view/header.php';
             <?php endforeach; ?>
         </table>
 <br><br>
+<img src="../img/chess_board.png" alt="Chess Board" height="400" width="400">
 </div>
 </div>
 </div>
